@@ -5,6 +5,7 @@ import time
 import unittest
 
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 
@@ -14,7 +15,7 @@ class ISelenium(unittest.TestCase):
     # 读入配置文件
     def get_config(self):
         config = configparser.ConfigParser()
-        config.read(os.path.join(os.environ['HOME'], 'iselenium.ini'))
+        config.read(os.path.join(os.environ['USERPROFILE'], 'iselenium.ini'))
         return config
 
     def tearDown(self):
@@ -35,8 +36,13 @@ class ISelenium(unittest.TestCase):
             print('使用无界面方式运行')
             chrome_options.add_argument("--headless")
 
-        self.driver = webdriver.Chrome(executable_path=config.get('driver', 'chrome_driver'),
-                                       options=chrome_options)
+        # self.driver = webdriver.Chrome(executable_path=config.get('driver', 'chrome_driver'),
+        #                                options=chrome_options)
+        s = Service(r'D:\python\chromedriver.exe')
+        self.driver = webdriver.Chrome(service=s)
+
+
+
 
     @allure.story('Test key word 今日头条')
     def test_webui_1(self):
@@ -64,7 +70,7 @@ class ISelenium(unittest.TestCase):
         time.sleep(5)
         assert f'百度一下' in self.driver.title
 
-        elem = self.driver.find_element_by_name("wd")
+        elem = self.driver.find_element("name", "wd")
         elem.send_keys(f'{search_keyword}{Keys.RETURN}')
         print(f'搜索关键词~{search_keyword}')
         time.sleep(5)
