@@ -38,7 +38,7 @@ class ISelenium(unittest.TestCase):
 
         # self.driver = webdriver.Chrome(executable_path=config.get('driver', 'chrome_driver'),
         #                                options=chrome_options)
-        s = Service(r'D:\python\chromedriver.exe')
+        s = Service(r'/usr/local/bin/chromedriver')
         self.driver = webdriver.Chrome(service=s)
 
 
